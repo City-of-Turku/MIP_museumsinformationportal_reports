@@ -1,0 +1,37 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="default-data-1.0.0" author="mip">
+        <insert tableName="report_request_status">
+            <column name="id" valueNumeric="0"/>
+            <column name="name" value="created"/>
+            <column name="active" valueNumeric="1"></column>
+        </insert>
+        <insert tableName="report_request_status">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="queued"/>
+            <column name="active" valueNumeric="1"></column>
+        </insert>
+        <insert tableName="report_request_status">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="running"/>
+            <column name="active" valueNumeric="1"></column>
+        </insert>
+        <insert tableName="report_request_status">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="success"/>
+            <column name="active" valueNumeric="1"></column>
+        </insert>
+        <insert tableName="report_request_status">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="failed"/>
+            <column name="active" valueNumeric="1"></column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

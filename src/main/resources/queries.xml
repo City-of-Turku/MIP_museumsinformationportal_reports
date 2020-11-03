@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <bean id="queryService" class="fi.turku.mip.reportserver.service.impl.QueryServiceImpl">
+        <property name="queries">
+            <map>
+                <entry key="CREATE_REPORT_REQUEST">
+                    <value>
+                        insert into report_request (
+                            report_id,
+                            status_id,
+                            owner,
+                            owner_email,
+                            requested_output_type
+                        ) values (
+                            ?,
+                            ?,
+                            ?,
+                            ?,
+                            ?
+                        )
+                    </value>
+                </entry>
+                
+                <entry key="DELETE_REPORT_REQUEST">
+                    <value> 
+                    	update report_request
+                    	set deleted = now()
+                    	where
+                    		report_request.id = ?                    
+                    </value>
+                </entry>
+                
+                <entry key="CREATE_REPORT_REQUEST_PARAMETER">
+                    <value>
+                        insert into report_request_parameter (
+                            report_request_id,
+                            name,
+                            value
+                        ) values (
+                            ?,
+                            ?,
+                            ?
+                        )
+                    </value>
+                </entry>
+                
+                <entry key="GET_REPORT_REQUEST">
+                    <value>
+                        select 
+                            rr.id                   as rr_id,
+                            rr.owner                as rr_owner,
+                            rr.owner_email          as rr_owner_email,
+                            rr.created              as rr_created,
+                            rr.modified             as rr_modified,
+                            rr.deleted              as rr_deleted,
+                            rr.status_message       as rr_status_message,
+                            rr.output_file          as rr_output_file,
+                            rr.requested_output_type    as rr_requested_output_type,
+                            
+                            rrs.id                  as rrs_id,
+                            rrs.name                as rrs_name,
+                            
+                            r.id                    as r_id,
+                            r.name                  as r_name,
+                            r.description           as r_description,
+                            r.reportsource_file     as r_reportsource_file,
+                            r.reportsource_path     as r_reportsource_path,
+                            r.active                as r_active,
+                            r.datasource_jndi_name  as r_datasource_jndi_name
+                        from 
+                            report_request rr, report r, report_request_status rrs
+                        where
+                            rr.report_id = r.id
+                            and
+                            rr.status_id = rrs.id
+                            and
+                            rr.id = ?
+                    </value>
+                </entry>
+                                
+                <entry key="GET_REPORT_REQUESTS_BY_ONWER">
+                    <value>
+                        select 
+                            rr.id                   as rr_id,
+                            rr.owner                as rr_owner,
+                            rr.owner_email          as rr_owner_email,
+                            rr.created              as rr_created,
+                            rr.modified             as rr_modified,
+                            rr.deleted              as rr_deleted,
+                            rr.status_message       as rr_status_message,
+                            rr.output_file          as rr_output_file,
+                            rr.requested_output_type    as rr_requested_output_type,
+                            
+                            rrs.id                  as rrs_id,
+                            rrs.name                as rrs_name,
+                            
+                            r.id                    as r_id,
+                            r.name                  as r_name,
+                            r.description           as r_description,
+                            r.reportsource_file     as r_reportsource_file,
+                            r.reportsource_path     as r_reportsource_path,
+                            r.active                as r_active,
+                            r.datasource_jndi_name  as r_datasource_jndi_name
+                        from 
+                            report_request rr, report r, report_request_status rrs
+                        where
+                            rr.report_id = r.id
+                            and
+                            rr.status_id = rrs.id
+                            and
+                            rr.deleted is null
+                            and
+                            rr.owner = ?
+                        order by 
+                            rr.created asc
+                    </value>
+                </entry>
+                
+                <entry key="GET_REPORT_REQUESTS_BY_STATUS">
+                    <value>
+                        select 
+                            rr.id                   as rr_id,
+                            rr.owner                as rr_owner,
+                            rr.owner_email          as rr_owner_email,
+                            rr.created              as rr_created,
+                            rr.modified             as rr_modified,
+                            rr.deleted              as rr_deleted,
+                            rr.status_message       as rr_status_message,
+                            rr.output_file          as rr_output_file,
+                            rr.requested_output_type    as rr_requested_output_type,
+                            
+                            rrs.id                  as rrs_id,
+                            rrs.name                as rrs_name,
+                            
+                            r.id                    as r_id,
+                            r.name                  as r_name,
+                            r.description           as r_description,
+                            r.reportsource_file     as r_reportsource_file,
+                            r.reportsource_path     as r_reportsource_path,
+                            r.active                as r_active,
+                            r.datasource_jndi_name  as r_datasource_jndi_name
+                        from 
+                            report_request rr, report r, report_request_status rrs
+                        where
+                            rr.report_id = r.id
+                            and
+                            rr.status_id = rrs.id
+                            and
+                            rr.deleted is null
+                            and
+                            rrs.id = ?
+                        order by 
+                            rr.created asc
+                    </value>
+                </entry>
+                
+                <entry key="GET_REPORT_REQUEST_PARAMETERS">
+                    <value>
+                        select
+                            rrp.id      as rrp_id,
+                            rrp.name    as rrp_name,
+                            rrp.value   as rrp_value
+                        from
+                            report_request_parameter rrp
+                        where
+                            rrp.report_request_id = ?
+                    </value>
+                </entry>
+                
+                <entry key="SET_REPORT_REQUEST_STATUS">
+                    <value>
+                        update
+                            report_request
+                        set
+                            status_id = ?,
+                            modified = now()
+                        where
+                            id = ? 
+                    </value>
+                </entry>
+
+                <entry key="SET_REPORT_REQUEST_OUTPUT_FILE">
+                    <value>
+                        update
+                            report_request
+                        set
+                            output_file = ?,
+                            modified = now()
+                        where
+                            id = ? 
+                    </value>
+                </entry>
+                                
+                <entry key="GET_REPORT_BY_ID">
+                    <value>
+                        select 
+                            r.id                    as r_id,
+                            r.name                  as r_name,
+                            r.description           as r_description,
+                            r.reportsource_file     as r_reportsource_file,
+                            r.reportsource_path     as r_reportsource_path,
+                            r.active                as r_active,
+                            r.datasource_jndi_name  as r_datasource_jndi_name
+                        from 
+                            report r
+                        where
+                            r.id = ?
+                    </value>
+                </entry>
+
+                <entry key="GET_REPORT_BY_NAME">
+                    <value>
+                        select 
+                            r.id                    as r_id,
+                            r.name                  as r_name,
+                            r.description           as r_description,
+                            r.reportsource_file     as r_reportsource_file,
+                            r.reportsource_path     as r_reportsource_path,
+                            r.active                as r_active,
+                            r.datasource_jndi_name  as r_datasource_jndi_name
+                        from 
+                            report r
+                        where
+                            r.name = ?
+                    </value>
+                </entry>
+                                
+                <entry key="GET_ACTIVE_GLOBAL_PARAMETERS">
+                    <value>
+                        select
+                            rrp.id      as rrp_id,
+                            rrp.name    as rrp_name,
+                            rrp.value   as rrp_value
+                        from
+                            global_parameter rrp
+                        where
+                            rrp.active = 1
+                    </value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>

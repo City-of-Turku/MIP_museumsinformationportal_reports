@@ -1,0 +1,107 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="tables-1.0.0" author="mip">
+
+        <createTable tableName="report">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_report"/>
+            </column>
+            <column name="name" type="varchar(256)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_report_name"/>
+            </column>
+            <column name="description" type="text">
+            </column>
+            <column name="reportsource_path" type="varchar(2048)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="reportsource_file" type="varchar(2048)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="number(1)" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="report_request_status">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_report_request_status"/>
+            </column>
+            <column name="name" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="number(1)" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="report_request">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_report_request"/>
+            </column>
+            <column name="report_id" type="bigint">
+                <constraints nullable="false" referencedTableName="report" referencedColumnNames="id" foreignKeyName="fk_report"/>
+            </column>
+            <column name="status_id" type="bigint">
+                <constraints nullable="false" referencedTableName="report_request_status" referencedColumnNames="id" foreignKeyName="fk_report_req_status"/>
+            </column>
+            <column name="owner" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_email" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requested_output_type" type="varchar(128)">
+            </column>
+            <column name="status_message" type="text">
+            </column>
+            <column name="output_file" type="varchar(2048)">
+            </column>
+            <column name="created" type="timestamp with time zone" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="timestamp with time zone">
+            </column>
+            <column name="deleted" type="timestamp with time zone">
+            </column>
+        </createTable>
+
+        <createTable tableName="report_request_parameter">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_report_request_param"/>
+            </column>
+            <column name="report_request_id" type="bigint">
+                <constraints nullable="false" referencedTableName="report_request" referencedColumnNames="id" foreignKeyName="fk_report_request"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="text">
+            </column>
+        </createTable>
+
+        <createTable tableName="global_parameter">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_global_parameter"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="text">
+            </column>
+            <column name="active" type="number(1)" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
