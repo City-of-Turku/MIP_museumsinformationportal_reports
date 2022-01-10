@@ -89,7 +89,7 @@ public class ReportRequestServiceImpl extends BaseServiceImpl implements ReportR
 		ReportRequest rr = null;
 
 		try {
-			rr = jdbcTemplate.queryForObject(getQuery("GET_REPORT_REQUEST"), args, new ReportRequestRowMapper());
+      rr = jdbcTemplate.queryForObject(getQuery("GET_REPORT_REQUEST"), new ReportRequestRowMapper(), args);
 		} catch(EmptyResultDataAccessException erdae) {
 			// ignore this exception, just return null when no report request was found
 			return null;
@@ -132,7 +132,7 @@ public class ReportRequestServiceImpl extends BaseServiceImpl implements ReportR
 		Object[] args = new Object[] {
 			reportRequestId
 		};
-		return jdbcTemplate.query(getQuery("GET_REPORT_REQUEST_PARAMETERS"), args, new ReportRequestParameterRowMapper());
+		return jdbcTemplate.query(getQuery("GET_REPORT_REQUEST_PARAMETERS"), new ReportRequestParameterRowMapper(), args);
 	}
 
 	/*
@@ -143,7 +143,7 @@ public class ReportRequestServiceImpl extends BaseServiceImpl implements ReportR
 		Object[] args = new Object[] {
 			reportRequestId
 		};
-		return jdbcTemplate.queryForObject(getQuery("GET_REPORT_REQUEST_STATUS"), args, new ReportRequestStatusRowMapper());
+		return jdbcTemplate.queryForObject(getQuery("GET_REPORT_REQUEST_STATUS"), new ReportRequestStatusRowMapper(), args);
 	}
 
 	/*
@@ -154,7 +154,7 @@ public class ReportRequestServiceImpl extends BaseServiceImpl implements ReportR
 		Object[] args = new Object[] {
 			owner
 		};
-		List<ReportRequest> rrs = jdbcTemplate.query(getQuery("GET_REPORT_REQUESTS_BY_ONWER"), args, new ReportRequestRowMapper());
+		List<ReportRequest> rrs = jdbcTemplate.query(getQuery("GET_REPORT_REQUESTS_BY_ONWER"), new ReportRequestRowMapper(), args);
 
 		for (ReportRequest reportRequest : rrs) {
 			reportRequest.setParameters(getReportRequestParameters(reportRequest.getId()));
@@ -171,7 +171,7 @@ public class ReportRequestServiceImpl extends BaseServiceImpl implements ReportR
 		Object[] args = new Object[] {
 			statusId
 		};
-		List<ReportRequest> rrs = jdbcTemplate.query(getQuery("GET_REPORT_REQUESTS_BY_STATUS"), args, new ReportRequestRowMapper());
+		List<ReportRequest> rrs = jdbcTemplate.query(getQuery("GET_REPORT_REQUESTS_BY_STATUS"), new ReportRequestRowMapper(), args);
 
 		for (ReportRequest reportRequest : rrs) {
 			reportRequest.setParameters(getReportRequestParameters(reportRequest.getId()));

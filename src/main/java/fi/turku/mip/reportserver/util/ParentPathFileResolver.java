@@ -2,7 +2,7 @@ package fi.turku.mip.reportserver.util;
 
 import java.io.File;
 
-import net.sf.jasperreports.engine.util.FileResolver;
+
 
 /**
  * Jasper utility class for finding the files that are related to a report (subreports, images etc)
@@ -10,7 +10,7 @@ import net.sf.jasperreports.engine.util.FileResolver;
  * @author mip
  *
  */
-public class ParentPathFileResolver implements FileResolver {
+public class ParentPathFileResolver {
 
 	private String parentPath;
 

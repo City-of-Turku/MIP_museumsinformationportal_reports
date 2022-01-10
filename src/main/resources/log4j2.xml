@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <!-- Appenders -->
+  <Appenders>
+    <Console name="console" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d %-5p: %c - %m%n"/>
+    </Console> 
+  </Appenders>
+  <Loggers>
+
+  <!-- Application Loggers -->
+    <Logger name="fi.turku.mip.reportserver" level="info" />
+
+    <Root level="warn">
+      <AppenderRef ref="console" />
+    </Root>
+  </Loggers>
+</Configuration>

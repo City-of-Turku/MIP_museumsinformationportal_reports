@@ -10,8 +10,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
-import org.springframework.jndi.JndiTemplate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import fi.turku.mip.reportserver.model.Report;
 import fi.turku.mip.reportserver.model.ReportRequest;
@@ -22,11 +22,10 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.SimpleJasperReportsContext;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.export.Exporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 
@@ -39,7 +38,7 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 public class JasperReportTask extends ReportTask {
 
 	// the logger
-	private static final Logger logger = Logger.getLogger(JasperReportTask.class);
+	private static final Logger logger = LogManager.getLogger(JasperReportTask.class);
 
 	// date formats used when parsing date type parameters
 	private static final String DATE_FORMAT_PATTERN = "dd.MM.yyyy";
@@ -71,7 +70,14 @@ public class JasperReportTask extends ReportTask {
 			con = ds.getConnection();
 
 			// fill the report
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, con);
+			// JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, con);
+
+      SimpleJasperReportsContext context = new SimpleJasperReportsContext();
+      JasperFillManager jfm = JasperFillManager.getInstance(context);
+      // FileRepositoryService fileRepository = new FileRepositoryService(context, reportSourcePath.getAbsolutePath(), false);
+      // context.setExtensions(RepositoryService.class, Collections.singletonList(fileRepository));
+
+      JasperPrint jasperPrint = jfm.fillFromRepo(reportSource.getAbsolutePath(), parameters, con);
 
 			// export it to requested output type
 			if ("PDF".equalsIgnoreCase(reportRequest.getRequestedOutputType())) {
@@ -82,7 +88,7 @@ public class JasperReportTask extends ReportTask {
 
 			} else if ("WORD".equalsIgnoreCase(reportRequest.getRequestedOutputType())) {
 
-				Exporter exporter = new JRDocxExporter();
+				JRDocxExporter exporter = new JRDocxExporter();
 				exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 
 				File outputFile = getOutputFile(reportRequest, ".docx");
@@ -93,7 +99,7 @@ public class JasperReportTask extends ReportTask {
 
 			} else if ("EXCEL".equalsIgnoreCase(reportRequest.getRequestedOutputType())) {
 
-				Exporter exporter = new JRXlsxExporter();
+				JRXlsxExporter exporter = new JRXlsxExporter();
 				exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 
 				File outputFile = getOutputFile(reportRequest, ".xlsx");
@@ -239,7 +245,7 @@ public class JasperReportTask extends ReportTask {
 	 * @param path the path for the report files
 	 * @return a file resolver
 	 */
-	private FileResolver getFileResolver(String path) {
+	private ParentPathFileResolver getFileResolver(String path) {
 		ParentPathFileResolver ppfr = new ParentPathFileResolver(path);
 		return ppfr;
 	}

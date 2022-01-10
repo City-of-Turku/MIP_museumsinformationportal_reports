@@ -1,7 +1,5 @@
 package fi.turku.mip.reportserver.config;
 
-import javax.sql.DataSource;
-
 public class ReportServerConfiguration {
 
 	private String reportSourceBasePath;

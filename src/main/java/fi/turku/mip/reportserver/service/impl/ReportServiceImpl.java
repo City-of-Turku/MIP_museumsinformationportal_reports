@@ -23,7 +23,7 @@ public class ReportServiceImpl extends BaseServiceImpl implements ReportService 
 		Object[] args = new Object[] {
 				name
 		};
-		return jdbcTemplate.queryForObject(getQuery("GET_REPORT_BY_NAME"), args, new ReportRowMapper());
+		return jdbcTemplate.queryForObject(getQuery("GET_REPORT_BY_NAME"), new ReportRowMapper(), args);
 	}
 
 	/*
@@ -34,7 +34,7 @@ public class ReportServiceImpl extends BaseServiceImpl implements ReportService 
 		Object[] args = new Object[] {
 				id
 		};
-		return jdbcTemplate.queryForObject(getQuery("GET_REPORT_BY_ID"), args, new ReportRowMapper());
+		return jdbcTemplate.queryForObject(getQuery("GET_REPORT_BY_ID"), new ReportRowMapper(), args);
 	}
 
 }

@@ -3,7 +3,9 @@ package fi.turku.mip.reportserver.core;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import fi.turku.mip.reportserver.config.ReportServerConfiguration;
 import fi.turku.mip.reportserver.model.ReportRequest;
@@ -20,7 +22,7 @@ import fi.turku.mip.reportserver.service.ReportRequestService;
 public abstract class ReportTask implements Runnable {
 
 	// the logger
-	private static final Logger logger = Logger.getLogger(ReportTask.class);
+	private static final Logger logger = LogManager.getLogger(ReportTask.class);
 	// the report request
 	protected ReportRequest reportRequest;
 	// the global report request parameters
@@ -35,7 +37,7 @@ public abstract class ReportTask implements Runnable {
 	 */
 	public void run() {
 
-		try {
+		try {      
 			logger.info("Start prosessing report request: " + reportRequest.getId());
 
 			// get the global report request parameters
