@@ -2,6 +2,8 @@
 
 ReportServer is a server application that creates JasperReports from API requests for MIP.
 
+Develop and Master branches are Spring v4, develop_v5 branch uses Spring v5
+
 ## Installation
 
 **Prerequisites**
